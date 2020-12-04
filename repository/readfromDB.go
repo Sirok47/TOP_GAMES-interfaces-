@@ -7,10 +7,8 @@ import (
 	"strconv"
 )
 
-func (g *SingleGame) Read (c echo.Context) error {
+func (g *SingleGame) Read (c echo.Context,db *sql.DB) error {
 	g= &SingleGame{0,"---",0,"---","---"}
-	db, _ := sql.Open("postgres", "user=postgres password=glazirovanniisirok dbname=TOP_GAMES sslmode=disable")
-	defer db.Close()
 	id, _ := strconv.Atoi(c.Param("id"))
 	res, err := db.Query("select * from TopGames where id = $1",id)
 	if err != nil {

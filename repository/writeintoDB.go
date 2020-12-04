@@ -7,9 +7,7 @@ import (
 	"strconv"
 )
 
-func (g *SingleGame) Write(c echo.Context) error {
-	db, _ := sql.Open("postgres", "user=postgres password=glazirovanniisirok dbname=TOP_GAMES sslmode=disable")
-	defer db.Close()
+func (g *SingleGame) Write(c echo.Context,db *sql.DB) error {
 	g.Id,_ = strconv.Atoi(c.Param("id"))
 	g.Name = c.Param("name")
 	rr, _ := strconv.Atoi(c.Param("rating"))
