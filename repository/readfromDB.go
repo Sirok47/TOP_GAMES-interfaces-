@@ -1,13 +1,12 @@
 package repository
 
 import (
-	"database/sql"
 	"github.com/Sirok47/TOP_GAMES/model"
 )
 
-func Read (db *sql.DB,g *model.SingleGame,id int) {
+func (R TopGamesRepository) Read (g *model.SingleGame,id int) {
 	g= &model.SingleGame{0,"---",0,"---","---"}
-	res, err := db.Query("select * from TopGames where id = $1",id)
+	res, err := R.Db.Query("select * from TopGames where id = $1",id)
 	if err != nil {
 		panic(err)
 	}

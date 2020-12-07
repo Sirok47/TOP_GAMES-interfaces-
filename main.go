@@ -9,6 +9,7 @@ import (
 
 func main() {
 	con:= &handler.TopGamesHandler{}
+
 	con.Db, _ = sql.Open("postgres", "user=postgres password=glazirovanniisirok dbname=TOP_GAMES sslmode=disable")
 	defer con.Db.Close()
 	
