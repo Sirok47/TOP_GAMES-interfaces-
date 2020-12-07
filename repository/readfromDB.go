@@ -2,14 +2,11 @@ package repository
 
 import (
 	"database/sql"
-	"github.com/labstack/echo/v4"
-	"net/http"
-	"strconv"
+	"github.com/Sirok47/TOP_GAMES/model"
 )
 
-func (g *SingleGame) Read (c echo.Context,db *sql.DB) error {
-	g= &SingleGame{0,"---",0,"---","---"}
-	id, _ := strconv.Atoi(c.Param("id"))
+func Read (db *sql.DB,g *model.SingleGame,id int) {
+	g= &model.SingleGame{0,"---",0,"---","---"}
 	res, err := db.Query("select * from TopGames where id = $1",id)
 	if err != nil {
 		panic(err)
@@ -21,7 +18,4 @@ func (g *SingleGame) Read (c echo.Context,db *sql.DB) error {
 		}
 	}
 	res.Close()
-
-	return c.JSON(http.StatusOK, g)
-
 }

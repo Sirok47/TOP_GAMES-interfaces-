@@ -2,17 +2,18 @@ package service
 
 import (
 	"database/sql"
-	"github.com/labstack/echo/v4"
-	"github.com/Sirok47/TOP_GAMES/repository"
 	"github.com/Sirok47/TOP_GAMES/model"
+	"github.com/Sirok47/TOP_GAMES/repository"
 )
-
-func (con *model.TopGamesHandler) Readservice() {
-	return Read(db,g)
+type TopGamesHandler struct {
+	Db *sql.DB
 }
-func (con *model.TopGamesHandler) Writeservice() {
-	return Write(db,g)
+func Readservice(db *sql.DB,g *model.SingleGame,id int) {
+	repository.Read(db,g,id)
 }
-func (con *model.TopGamesHandler) Deleteservice() {
-	return Delete(db,g)
+func Writeservice(db *sql.DB) {
+	repository.Write(db)
+}
+func Deleteservice(db *sql.DB,id int) {
+	repository.Delete(db,id)
 }
