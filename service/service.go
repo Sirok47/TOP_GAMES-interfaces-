@@ -5,9 +5,7 @@ import (
 	"github.com/Sirok47/TOP_GAMES/model"
 	"github.com/Sirok47/TOP_GAMES/repository"
 )
-type TopGamesHandler struct {
-	Db *sql.DB
-}
+
 func Readservice(db *sql.DB,g *model.SingleGame,id int) {
 	repository.Read(db,g,id)
 }

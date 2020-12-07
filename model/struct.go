@@ -1,6 +1,5 @@
 package model
 
-
 type SingleGame struct{
 	Id int `json:"id"`
 	Name string `json:"name"`

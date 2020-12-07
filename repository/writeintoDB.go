@@ -10,5 +10,4 @@ func Write (db *sql.DB) {
 	if err != nil{
 		panic(err)
 	}
-	return
 }
