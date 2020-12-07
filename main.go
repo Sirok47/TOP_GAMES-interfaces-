@@ -1,27 +1,26 @@
 package main
 
 import (
-	"TOP_GAMES/repository"
-	"TOP_GAMES/service"
+	"TOP_GAMES/handler"
+	. "TOP_GAMES/model"
 	"database/sql"
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
 )
 
-
 func main() {
-	g:=repository.SingleGame{}
-
+	con:= TopGamesHandler{}
+	con.G = SingleGame{}
+	con.Db, _ = sql.Open("postgres", "user=postgres password=glazirovanniisirok dbname=TOP_GAMES sslmode=disable")
+	defer con.Db.Close()
+	
 	e := echo.New()
 
-	db, _ := sql.Open("postgres", "user=postgres password=glazirovanniisirok dbname=TOP_GAMES sslmode=disable")
-	defer db.Close()
+	e.POST("/write/:id/:name/:rating/:platform/:date", con.Writehandler)
 
-	e.POST("/write/:id/:name/:rating/:platform/:date", g.Write(e,db))
+	e.DELETE("/delete/:id", con.Deletehandler)
 
-	e.DELETE("/delete/:id", repository.Delete(e,db))
-
-	e.GET("/read/:id", g.Read(c,db))
+	e.GET("/read/:id", con.Readhandler)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

@@ -1,17 +1,28 @@
 package handler
 
 import (
-	"database/sql"
+	//."TOP_GAMES/model"
+	."TOP_GAMES/service"
 	"github.com/labstack/echo/v4"
-	"TOP_GAMES/service"
+	"strconv"
 )
 
-func Readhandler(c echo.Context, db *sql.DB) {
-	return service.Readservice(c,db)
+func (con *TopGamesHandler) Readhandler(c echo.Context) error {
+	con.Readservice()
+	return c.JSON(200, con.G)
 }
-func Writehandler(c echo.Context, db *sql.DB) {
-	return service.Writeservice(c,db)
+func (con model.TopGamesHandler) Writehandler(c echo.Context) error {
+	con.G.Id,_ = strconv.Atoi(c.Param("id"))
+	con.G.Name = c.Param("name")
+	rr, _ := strconv.Atoi(c.Param("rating"))
+	con.G.Rating=float64(rr)
+	con.G.Platform= c.Param("platform")
+	con.G.Date= c.Param("date")
+	Writeservice(con)
+	return c.String(200, "Done!")
 }
-func Deletehandler(c echo.Context, db *sql.DB) {
-	return service.Deleteservice(c,db)
+func (con TopGamesHandler) Deletehandler(c echo.Context) error {
+	Deleteservice(con.Db,con.G)
+	return c.String(200, "Line have been deleted.")
 }
+

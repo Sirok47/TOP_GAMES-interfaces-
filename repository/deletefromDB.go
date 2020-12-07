@@ -13,5 +13,5 @@ func Delete(c echo.Context,db *sql.DB) error {
 	if err != nil{
 		panic(err)
 	}
-	return c.String(http.StatusOK, "Line have been deleted.")
+	return
 }

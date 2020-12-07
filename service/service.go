@@ -4,14 +4,15 @@ import (
 	"database/sql"
 	"github.com/labstack/echo/v4"
 	"TOP_GAMES/repository"
+	. "TOP_GAMES/model"
 )
 
-func Readservice(c echo.Context, db *sql.DB) {
-	return g.Read(c,db)
+func (con TopGamesHandler) Readservice() {
+	return Read(db,g)
 }
-func Writehandler(c echo.Context, db *sql.DB) {
-	return g.Write(c,db)
+func Writeservice(con TopGamesHandler) {
+	return Write(db,g)
 }
-func Deletehandler(c echo.Context, db *sql.DB) {
-	return repository.Delete(c,db)
+func Deleteservice(db *sql.DB, g SingleGame) {
+	return Delete(db,g)
 }
