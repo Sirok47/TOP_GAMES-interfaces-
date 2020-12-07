@@ -3,16 +3,16 @@ package service
 import (
 	"database/sql"
 	"github.com/labstack/echo/v4"
-	"TOP_GAMES/repository"
-	. "TOP_GAMES/model"
+	"github.com/Sirok47/TOP_GAMES/repository"
+	"github.com/Sirok47/TOP_GAMES/model"
 )
 
-func (con TopGamesHandler) Readservice() {
+func (con *model.TopGamesHandler) Readservice() {
 	return Read(db,g)
 }
-func Writeservice(con TopGamesHandler) {
+func (con *model.TopGamesHandler) Writeservice() {
 	return Write(db,g)
 }
-func Deleteservice(db *sql.DB, g SingleGame) {
+func (con *model.TopGamesHandler) Deleteservice() {
 	return Delete(db,g)
 }

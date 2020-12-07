@@ -1,17 +1,17 @@
 package handler
 
 import (
-	//."TOP_GAMES/model"
-	."TOP_GAMES/service"
+	"github.com/Sirok47/TOP_GAMES/model"
+	"github.com/Sirok47/TOP_GAMES/service"
 	"github.com/labstack/echo/v4"
 	"strconv"
 )
 
-func (con *TopGamesHandler) Readhandler(c echo.Context) error {
+func (con *model.TopGamesHandler) Readhandler(c echo.Context) error {
 	con.Readservice()
 	return c.JSON(200, con.G)
 }
-func (con model.TopGamesHandler) Writehandler(c echo.Context) error {
+func (con *model.TopGamesHandler) Writehandler(c echo.Context) error {
 	con.G.Id,_ = strconv.Atoi(c.Param("id"))
 	con.G.Name = c.Param("name")
 	rr, _ := strconv.Atoi(c.Param("rating"))
@@ -21,7 +21,7 @@ func (con model.TopGamesHandler) Writehandler(c echo.Context) error {
 	Writeservice(con)
 	return c.String(200, "Done!")
 }
-func (con TopGamesHandler) Deletehandler(c echo.Context) error {
+func (con *model.TopGamesHandler) Deletehandler(c echo.Context) error {
 	Deleteservice(con.Db,con.G)
 	return c.String(200, "Line have been deleted.")
 }
