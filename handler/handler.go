@@ -18,11 +18,11 @@ func (con *model.TopGamesHandler) Writehandler(c echo.Context) error {
 	con.G.Rating=float64(rr)
 	con.G.Platform= c.Param("platform")
 	con.G.Date= c.Param("date")
-	Writeservice(con)
+	service.Writeservice(con)
 	return c.String(200, "Done!")
 }
 func (con *model.TopGamesHandler) Deletehandler(c echo.Context) error {
-	Deleteservice(con.Db,con.G)
+	service.Deleteservice(con.Db,con.G)
 	return c.String(200, "Line have been deleted.")
 }
 

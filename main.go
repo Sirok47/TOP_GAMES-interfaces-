@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	con:= model.TopGamesHandler{}
+	con:= &model.TopGamesHandler{}
 	con.G = model.SingleGame{}
 	con.Db, _ = sql.Open("postgres", "user=postgres password=glazirovanniisirok dbname=TOP_GAMES sslmode=disable")
 	defer con.Db.Close()
