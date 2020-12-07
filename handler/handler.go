@@ -13,19 +13,21 @@ type TopGamesHandler struct {
 
 func (con *TopGamesHandler) Readhandler(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
+	g := model.SingleGame{}
 	Service := service.TopGamesService{Db:con.Db}
-	Service.Readservice(&model.G,id)
-	return c.JSON(200, model.G)
+	Service.Readservice(&g,id)
+	return c.JSON(200, g)
 }
 func (con *TopGamesHandler) Writehandler(c echo.Context) error {
-	model.G.Id,_ = strconv.Atoi(c.Param("id"))
-	model.G.Name = c.Param("name")
+	g := model.SingleGame{}
+	g.Id,_ = strconv.Atoi(c.Param("id"))
+	g.Name = c.Param("name")
 	rr, _ := strconv.Atoi(c.Param("rating"))
-	model.G.Rating=float64(rr)
-	model.G.Platform= c.Param("platform")
-	model.G.Date= c.Param("date")
+	g.Rating=float64(rr)
+	g.Platform= c.Param("platform")
+	g.Date= c.Param("date")
 	Service := service.TopGamesService{Db:con.Db}
-	Service.Writeservice()
+	Service.Writeservice(&g)
 	return c.String(200, "Done!")
 }
 func (con *TopGamesHandler) Deletehandler(c echo.Context) error {

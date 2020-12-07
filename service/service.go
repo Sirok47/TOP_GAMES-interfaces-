@@ -12,9 +12,9 @@ func (S TopGamesService) Readservice(g *model.SingleGame,id int) {
 	Rep := repository.TopGamesRepository{Db:S.Db}
 	Rep.Read(g,id)
 }
-func (S TopGamesService) Writeservice() {
+func (S TopGamesService) Writeservice(g *model.SingleGame) {
 	Rep := repository.TopGamesRepository{Db:S.Db}
-	Rep.Write()
+	Rep.Write(g)
 }
 func (S TopGamesService) Deleteservice(id int) {
 	Rep := repository.TopGamesRepository{Db:S.Db}

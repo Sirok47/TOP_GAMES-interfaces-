@@ -7,4 +7,3 @@ type SingleGame struct{
 	Platform string `json:"platform"`
 	Date string `json:"date"`
 }
-var G SingleGame
