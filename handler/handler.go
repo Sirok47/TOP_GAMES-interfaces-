@@ -7,31 +7,62 @@ import (
 	"github.com/labstack/echo/v4"
 	"strconv"
 )
+
 type TopGames struct {
-	Db *sql.DB
+	Db      *sql.DB
 	Service *service.TopGames
 }
-
 func (con *TopGames) ReadLine(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
-	if err!=nil{return c.String(500, "ID can't be converted")}
-	return c.JSON(200, con.Service.ReadLine(id))
+	if err != nil {
+		return c.JSON(500, err)
+	}
+	g, err:=con.Service.ReadLine(id)
+	if err!=nil{return c.JSON(500, err)}
+	return c.JSON(200, g)
 }
 func (con *TopGames) CreateLine(c echo.Context) error {
-	g := model.SingleGame{}
-	rr,err := strconv.Atoi(c.Param("rating"))
-	if err!=nil{return c.String(500, "Rating can't be converted")}
-	g.Rating=float64(rr)
-	g.Id,err = strconv.Atoi(c.Param("id"))
-	if err!=nil{return c.String(500, "ID can't be converted")}
-	g.Name = c.Param("name")
-	g.Platform= c.Param("platform")
-	g.Date= c.Param("date")
-	return c.String(201, con.Service.CreateLine(&g))
+	var err error
+	g := new(model.SingleGame)
+	gg := new(model.JSON)
+	if err = c.Bind(gg); err != nil {
+		return err
+	}
+	g.Id,err=strconv.Atoi(gg.Id)
+	if err!=nil{return err}
+	g.Rating,err=strconv.ParseFloat(gg.Rating,64)
+	if err!=nil{return err}
+	g.Name=gg.Name
+	g.Date=gg.Date
+	g.Platform=gg.Platform
+	err = con.Service.CreateLine(g)
+	if err != nil{return err}
+	return c.String(201, "Line have been created")
+}
+func (con *TopGames) UpdateLine(c echo.Context) error {
+	var err error
+	g := new(model.SingleGame)
+	gg := new(model.JSON)
+	if err = c.Bind(gg); err != nil {
+		return err
+	}
+	g.Id,err=strconv.Atoi(gg.Id)
+	if err!=nil{return err}
+	g.Rating,err=strconv.ParseFloat(gg.Rating,64)
+	if err!=nil{return err}
+	g.Name=gg.Name
+	g.Date=gg.Date
+	g.Platform=gg.Platform
+	err = con.Service.UpdateLine(g)
+	if err != nil{return err}
+	return c.String(201, "Line have been updated")
 }
 func (con *TopGames) DeleteLine(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
-	if err!=nil{return c.String(500, "ID can't be converted")}
-	return c.String(200, con.Service.DeleteLine(id))
+	if err != nil {
+		return c.JSON(500, err)
+	}
+	err=con.Service.DeleteLine(id)
+	if err!=nil{return c.JSON(500,err)}
+	return c.String(200, "Line have been deleted")
 }
-
