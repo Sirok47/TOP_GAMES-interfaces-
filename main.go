@@ -11,10 +11,10 @@ import (
 
 func main() {
 	con:= &handler.TopGames{}
-	con.Service = &service.TopGames{}
-	con.Service.Rep = &repository.TopGames{}
 	con.Db, _ = sql.Open("postgres", "user=postgres password=glazirovanniisirok dbname=TOP_GAMES sslmode=disable")
 	defer con.Db.Close()
+	con.Service = &service.TopGames{Db: con.Db}
+	con.Service.Rep = &repository.TopGames{Db: con.Service.Db}
 	
 	e := echo.New()
 

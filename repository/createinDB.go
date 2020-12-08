@@ -9,5 +9,6 @@ func (R TopGames) CreateLine(g *model.SingleGame) string {
 	if err != nil{
 		return "Can't create line."
 	}
-	return "Line have been created"
+	str:= "Line have been created"
+	return str
 }
