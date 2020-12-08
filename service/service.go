@@ -5,18 +5,18 @@ import (
 	"github.com/Sirok47/TOP_GAMES/model"
 	"github.com/Sirok47/TOP_GAMES/repository"
 )
-type TopGamesService struct {
+type TopGames struct {
 	Db *sql.DB
 }
-func (S TopGamesService) Readservice(g *model.SingleGame,id int) {
-	Rep := repository.TopGamesRepository{Db:S.Db}
-	Rep.Read(g,id)
+func (S TopGames) ReadLine(id int) *model.SingleGame {
+	Rep := repository.TopGames{Db:S.Db}
+	return Rep.ReadLine(id)
 }
-func (S TopGamesService) Writeservice(g *model.SingleGame) {
-	Rep := repository.TopGamesRepository{Db:S.Db}
-	Rep.Write(g)
+func (S TopGames) CreateLine(g *model.SingleGame) {
+	Rep := repository.TopGames{Db:S.Db}
+	Rep.CreateLine(g)
 }
-func (S TopGamesService) Deleteservice(id int) {
-	Rep := repository.TopGamesRepository{Db:S.Db}
-	Rep.Delete(id)
+func (S TopGames) DeleteLine(id int) {
+	Rep := repository.TopGames{Db:S.Db}
+	Rep.DeleteLine(id)
 }

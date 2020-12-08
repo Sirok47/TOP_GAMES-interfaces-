@@ -7,18 +7,16 @@ import (
 	"github.com/labstack/echo/v4"
 	"strconv"
 )
-type TopGamesHandler struct {
+type TopGames struct {
 	Db *sql.DB
 }
 
-func (con *TopGamesHandler) Readhandler(c echo.Context) error {
+func (con *TopGames) ReadLine(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
-	g := model.SingleGame{}
-	Service := service.TopGamesService{Db:con.Db}
-	Service.Readservice(&g,id)
-	return c.JSON(200, g)
+	Service := service.TopGames{Db:con.Db}
+	return c.JSON(200, Service.ReadLine(id))
 }
-func (con *TopGamesHandler) Writehandler(c echo.Context) error {
+func (con *TopGames) CreateLine(c echo.Context) error {
 	g := model.SingleGame{}
 	g.Id,_ = strconv.Atoi(c.Param("id"))
 	g.Name = c.Param("name")
@@ -26,14 +24,14 @@ func (con *TopGamesHandler) Writehandler(c echo.Context) error {
 	g.Rating=float64(rr)
 	g.Platform= c.Param("platform")
 	g.Date= c.Param("date")
-	Service := service.TopGamesService{Db:con.Db}
-	Service.Writeservice(&g)
+	Service := service.TopGames{Db:con.Db}
+	Service.CreateLine(&g)
 	return c.String(200, "Done!")
 }
-func (con *TopGamesHandler) Deletehandler(c echo.Context) error {
+func (con *TopGames) DeleteLine(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
-	Service := service.TopGamesService{Db:con.Db}
-	Service.Deleteservice(id)
+	Service := service.TopGames{Db:con.Db}
+	Service.DeleteLine(id)
 	return c.String(200, "Line have been deleted.")
 }
 

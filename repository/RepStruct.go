@@ -2,6 +2,6 @@ package repository
 
 import "database/sql"
 
-type TopGamesRepository struct {
+type TopGames struct {
 	Db *sql.DB
 }
