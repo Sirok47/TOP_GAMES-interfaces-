@@ -7,16 +7,14 @@ import (
 )
 type TopGames struct {
 	Db *sql.DB
+	Rep *repository.TopGames
 }
 func (S TopGames) ReadLine(id int) *model.SingleGame {
-	Rep := repository.TopGames{Db:S.Db}
-	return Rep.ReadLine(id)
+	return S.Rep.ReadLine(id)
 }
 func (S TopGames) CreateLine(g *model.SingleGame) {
-	Rep := repository.TopGames{Db:S.Db}
-	Rep.CreateLine(g)
+	S.Rep.CreateLine(g)
 }
 func (S TopGames) DeleteLine(id int) {
-	Rep := repository.TopGames{Db:S.Db}
-	Rep.DeleteLine(id)
+	S.Rep.DeleteLine(id)
 }

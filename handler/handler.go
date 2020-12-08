@@ -9,12 +9,12 @@ import (
 )
 type TopGames struct {
 	Db *sql.DB
+	Service *service.TopGames
 }
 
 func (con *TopGames) ReadLine(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
-	Service := service.TopGames{Db:con.Db}
-	return c.JSON(200, Service.ReadLine(id))
+	return c.JSON(200, con.Service.ReadLine(id))
 }
 func (con *TopGames) CreateLine(c echo.Context) error {
 	g := model.SingleGame{}
@@ -24,14 +24,12 @@ func (con *TopGames) CreateLine(c echo.Context) error {
 	g.Rating=float64(rr)
 	g.Platform= c.Param("platform")
 	g.Date= c.Param("date")
-	Service := service.TopGames{Db:con.Db}
-	Service.CreateLine(&g)
+	con.Service.CreateLine(&g)
 	return c.String(200, "Done!")
 }
 func (con *TopGames) DeleteLine(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
-	Service := service.TopGames{Db:con.Db}
-	Service.DeleteLine(id)
+	con.Service.DeleteLine(id)
 	return c.String(200, "Line have been deleted.")
 }
 

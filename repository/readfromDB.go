@@ -6,7 +6,7 @@ import (
 )
 
 func (R TopGames) ReadLine (id int) *model.SingleGame {
-	g:= &model.SingleGame{Id:0,Name: "---",Rating: 0,Platform: "---",Date: "---"}
+	g:= &model.SingleGame{Id:id,Name: "---",Rating: 0,Platform: "---",Date: "---"}
 	res, err := R.Db.Query("select * from TopGames where id = $1",id)
 	if err != nil {
 		fmt.Println(err)
