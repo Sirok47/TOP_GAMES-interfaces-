@@ -9,16 +9,23 @@ import (
 )
 
 type TopGames struct {
-	Db      *sql.DB
-	Service *service.TopGames
+	db   *sql.DB
+	serv *service.TopGames
 }
+
+func NewHandler(db *sql.DB) *TopGames {
+	return &TopGames{db, service.NewService(db)}
+}
+
 func (con *TopGames) ReadLine(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return c.JSON(500, err)
 	}
-	g, err:=con.Service.ReadLine(id)
-	if err!=nil{return c.JSON(500, err)}
+	g, err := con.serv.ReadLine(id)
+	if err != nil {
+		return c.JSON(500, err)
+	}
 	return c.JSON(200, g)
 }
 func (con *TopGames) CreateLine(c echo.Context) error {
@@ -28,15 +35,21 @@ func (con *TopGames) CreateLine(c echo.Context) error {
 	if err = c.Bind(gg); err != nil {
 		return err
 	}
-	g.Id,err=strconv.Atoi(gg.Id)
-	if err!=nil{return err}
-	g.Rating,err=strconv.ParseFloat(gg.Rating,64)
-	if err!=nil{return err}
-	g.Name=gg.Name
-	g.Date=gg.Date
-	g.Platform=gg.Platform
-	err = con.Service.CreateLine(g)
-	if err != nil{return err}
+	g.Id, err = strconv.Atoi(gg.Id)
+	if err != nil {
+		return err
+	}
+	g.Rating, err = strconv.ParseFloat(gg.Rating, 64)
+	if err != nil {
+		return err
+	}
+	g.Name = gg.Name
+	g.Date = gg.Date
+	g.Platform = gg.Platform
+	err = con.serv.CreateLine(g)
+	if err != nil {
+		return err
+	}
 	return c.String(201, "Line have been created")
 }
 func (con *TopGames) UpdateLine(c echo.Context) error {
@@ -46,15 +59,21 @@ func (con *TopGames) UpdateLine(c echo.Context) error {
 	if err = c.Bind(gg); err != nil {
 		return err
 	}
-	g.Id,err=strconv.Atoi(gg.Id)
-	if err!=nil{return err}
-	g.Rating,err=strconv.ParseFloat(gg.Rating,64)
-	if err!=nil{return err}
-	g.Name=gg.Name
-	g.Date=gg.Date
-	g.Platform=gg.Platform
-	err = con.Service.UpdateLine(g)
-	if err != nil{return err}
+	g.Id, err = strconv.Atoi(gg.Id)
+	if err != nil {
+		return err
+	}
+	g.Rating, err = strconv.ParseFloat(gg.Rating, 64)
+	if err != nil {
+		return err
+	}
+	g.Name = gg.Name
+	g.Date = gg.Date
+	g.Platform = gg.Platform
+	err = con.serv.UpdateLine(g)
+	if err != nil {
+		return err
+	}
 	return c.String(201, "Line have been updated")
 }
 func (con *TopGames) DeleteLine(c echo.Context) error {
@@ -62,7 +81,9 @@ func (con *TopGames) DeleteLine(c echo.Context) error {
 	if err != nil {
 		return c.JSON(500, err)
 	}
-	err=con.Service.DeleteLine(id)
-	if err!=nil{return c.JSON(500,err)}
+	err = con.serv.DeleteLine(id)
+	if err != nil {
+		return c.JSON(500, err)
+	}
 	return c.String(200, "Line have been deleted")
 }

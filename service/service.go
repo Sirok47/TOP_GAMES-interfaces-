@@ -7,19 +7,22 @@ import (
 )
 
 type TopGames struct {
-	Db  *sql.DB
-	Rep *repository.TopGames
+	db  *sql.DB
+	rep *repository.TopGames
+}
+func NewService(db *sql.DB) *TopGames {
+	return &TopGames{db,repository.NewRep(db)}
 }
 
-func (S TopGames) ReadLine(id int) (*model.SingleGame,error) {
-	return S.Rep.ReadLine(id)
+func (S TopGames) ReadLine(id int) (*model.SingleGame, error) {
+	return S.rep.ReadLine(id)
 }
 func (S TopGames) CreateLine(g *model.SingleGame) error {
-	return S.Rep.CreateLine(g)
+	return S.rep.CreateLine(g)
 }
 func (S TopGames) UpdateLine(g *model.SingleGame) error {
-	return S.Rep.UpdateLine(g)
+	return S.rep.UpdateLine(g)
 }
 func (S TopGames) DeleteLine(id int) error {
-	return S.Rep.DeleteLine(id)
+	return S.rep.DeleteLine(id)
 }
