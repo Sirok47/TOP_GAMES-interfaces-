@@ -12,9 +12,9 @@ type TopGames struct {
 func (S TopGames) ReadLine(id int) *model.SingleGame {
 	return S.Rep.ReadLine(id)
 }
-func (S TopGames) CreateLine(g *model.SingleGame) {
-	S.Rep.CreateLine(g)
+func (S TopGames) CreateLine(g *model.SingleGame) string {
+	return S.Rep.CreateLine(g)
 }
-func (S TopGames) DeleteLine(id int) {
-	S.Rep.DeleteLine(id)
+func (S TopGames) DeleteLine(id int) string {
+	return S.Rep.DeleteLine(id)
 }

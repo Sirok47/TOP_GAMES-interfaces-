@@ -24,12 +24,10 @@ func (con *TopGames) CreateLine(c echo.Context) error {
 	g.Rating=float64(rr)
 	g.Platform= c.Param("platform")
 	g.Date= c.Param("date")
-	con.Service.CreateLine(&g)
-	return c.String(200, "Done!")
+	return c.String(200, con.Service.CreateLine(&g))
 }
 func (con *TopGames) DeleteLine(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
-	con.Service.DeleteLine(id)
-	return c.String(200, "Line have been deleted.")
+	return c.String(200, con.Service.DeleteLine(id))
 }
 
