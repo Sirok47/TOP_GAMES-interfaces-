@@ -33,22 +33,22 @@ func (con *TopGames) CreateLine(c echo.Context) error {
 	g := new(model.SingleGame)
 	gg := new(model.JSON)
 	if err = c.Bind(gg); err != nil {
-		return err
+		return c.JSON(500, err)
 	}
 	g.Id, err = strconv.Atoi(gg.Id)
 	if err != nil {
-		return err
+		return c.JSON(500, err)
 	}
 	g.Rating, err = strconv.ParseFloat(gg.Rating, 64)
 	if err != nil {
-		return err
+		return c.JSON(500, err)
 	}
 	g.Name = gg.Name
 	g.Date = gg.Date
 	g.Platform = gg.Platform
 	err = con.serv.CreateLine(g)
 	if err != nil {
-		return err
+		return c.JSON(500, err)
 	}
 	return c.String(201, "Line have been created")
 }
@@ -57,22 +57,22 @@ func (con *TopGames) UpdateLine(c echo.Context) error {
 	g := new(model.SingleGame)
 	gg := new(model.JSON)
 	if err = c.Bind(gg); err != nil {
-		return err
+		return c.JSON(500, err)
 	}
 	g.Id, err = strconv.Atoi(gg.Id)
 	if err != nil {
-		return err
+		return c.JSON(500, err)
 	}
 	g.Rating, err = strconv.ParseFloat(gg.Rating, 64)
 	if err != nil {
-		return err
+		return c.JSON(500, err)
 	}
 	g.Name = gg.Name
 	g.Date = gg.Date
 	g.Platform = gg.Platform
 	err = con.serv.UpdateLine(g)
 	if err != nil {
-		return err
+		return c.JSON(500, err)
 	}
 	return c.String(201, "Line have been updated")
 }

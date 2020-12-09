@@ -8,10 +8,9 @@ import (
 )
 
 func main() {
-	con := &handler.TopGames{}
 	DBConnection, _ := sql.Open("postgres", "user=postgres password=glazirovanniisirok dbname=TOP_GAMES sslmode=disable")
 	defer DBConnection.Close()
-	handler.NewHandler(DBConnection)
+	con:=handler.NewHandler(DBConnection)
 
 	e := echo.New()
 
