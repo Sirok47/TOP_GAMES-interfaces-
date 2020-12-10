@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/Sirok47/TOP_GAMES/model"
 	"github.com/Sirok47/TOP_GAMES/repository"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -12,19 +13,23 @@ type TopGames struct {
 	ctx context.Context
 	rep *repository.TopGames
 }
-func NewService(db *mongo.Collection,ctx context.Context) *TopGames {
-	return &TopGames{db,ctx, repository.NewRep(db,ctx)}
+
+func NewSrv(ctx context.Context, db *mongo.Collection) *TopGames {
+	return &TopGames{db, ctx, repository.NewRps(ctx, db)}
 }
 
-func (S TopGames) ReadLine(id int) (*model.SingleGame, error) {
-	return S.rep.ReadLine(id)
+func (s TopGames) Read(id int) (*model.SingleGame, error) {
+	return s.rep.Read(id)
 }
-func (S TopGames) CreateLine(g *model.SingleGame) error {
-	return S.rep.CreateLine(g)
+
+func (s TopGames) Create(g *model.SingleGame) error {
+	return s.rep.Create(g)
 }
-func (S TopGames) UpdateLine(g *model.SingleGame) error {
-	return S.rep.UpdateLine(g)
+
+func (s TopGames) Update(g *model.SingleGame) error {
+	return s.rep.Update(g)
 }
-func (S TopGames) DeleteLine(id int) error {
-	return S.rep.DeleteLine(id)
+
+func (s TopGames) Delete(id int) error {
+	return s.rep.Delete(id)
 }

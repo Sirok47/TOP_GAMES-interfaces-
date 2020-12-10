@@ -2,13 +2,15 @@ package repository
 
 import (
 	"context"
+
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type TopGames struct {
-	db *mongo.Collection
+	db  *mongo.Collection
 	ctx context.Context
 }
-func NewRep(db *mongo.Collection, ctx context.Context) *TopGames {
-	return &TopGames{db,ctx}
+
+func NewRps(ctx context.Context, db *mongo.Collection) *TopGames {
+	return &TopGames{db, ctx}
 }
