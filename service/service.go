@@ -1,17 +1,19 @@
 package service
 
 import (
-	"database/sql"
+	"context"
 	"github.com/Sirok47/TOP_GAMES/model"
 	"github.com/Sirok47/TOP_GAMES/repository"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type TopGames struct {
-	db  *sql.DB
+	db  *mongo.Collection
+	ctx context.Context
 	rep *repository.TopGames
 }
-func NewService(db *sql.DB) *TopGames {
-	return &TopGames{db,repository.NewRep(db)}
+func NewService(db *mongo.Collection,ctx context.Context) *TopGames {
+	return &TopGames{db,ctx, repository.NewRep(db,ctx)}
 }
 
 func (S TopGames) ReadLine(id int) (*model.SingleGame, error) {

@@ -1,10 +1,14 @@
 package repository
 
-import "database/sql"
+import (
+	"context"
+	"go.mongodb.org/mongo-driver/mongo"
+)
 
 type TopGames struct {
-	db *sql.DB
+	db *mongo.Collection
+	ctx context.Context
 }
-func NewRep(db *sql.DB) *TopGames {
-	return &TopGames{db}
+func NewRep(db *mongo.Collection, ctx context.Context) *TopGames {
+	return &TopGames{db,ctx}
 }

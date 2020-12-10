@@ -1,8 +1,11 @@
 package repository
 
-import "github.com/Sirok47/TOP_GAMES/model"
+import (
+	"github.com/Sirok47/TOP_GAMES/model"
+	"go.mongodb.org/mongo-driver/bson"
+)
 
 func (R TopGames) CreateLine(g *model.SingleGame) error {
-	_, err := R.db.Exec("insert into TopGames (id,GameName,Rating,Platform,ReleaseDate) values ($1,$2,$3,$4,$5)", g.Id, g.Name, g.Rating, g.Platform, g.Date)
+	_, err := R.db.InsertOne(R.ctx,bson.M{"_id":g.Id,"Name":g.Name,"Rating":g.Rating,"Platform":g.Platform,"Date":g.Date})
 	return err
 }
