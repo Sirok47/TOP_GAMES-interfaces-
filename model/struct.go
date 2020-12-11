@@ -1,5 +1,7 @@
+// Package model contains "SingleGame" structure
 package model
 
+// SingleGame stores data from requests
 type SingleGame struct {
 	ID       int     `json:"ID" bson:"_id"`
 	Name     string  `json:"Name" bson:"Name"`

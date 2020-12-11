@@ -6,7 +6,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func (r TopGames) Delete(id int) error {
+// Delete deletes data from DB by ID
+func (r *TopGames) Delete(id int) error {
 	_, err := r.db.DeleteOne(
 		r.ctx,
 		bson.D{

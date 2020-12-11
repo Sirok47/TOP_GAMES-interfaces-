@@ -7,7 +7,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func (r TopGames) Update(g *model.SingleGame) error {
+// Update updates data in DB using "TopGames" structure's object
+func (r *TopGames) Update(g *model.SingleGame) error {
 	_, err := r.db.ReplaceOne(
 		r.ctx,
 		bson.D{

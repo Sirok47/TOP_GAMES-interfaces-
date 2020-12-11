@@ -7,7 +7,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func (r TopGames) Read(id int) (*model.SingleGame, error) {
+// Read gets data from DB by ID and writes it into "TopGames"'s object
+func (r *TopGames) Read(id int) (*model.SingleGame, error) {
 	g := &model.SingleGame{ID: id, Name: "---", Rating: 0, Platform: "---", Date: "---"}
 	err := r.db.FindOne(
 		r.ctx,

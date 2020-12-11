@@ -6,7 +6,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func (r TopGames) Create(g *model.SingleGame) error {
+// Create inserts data from "TopGames" structure's object into DB
+func (r *TopGames) Create(g *model.SingleGame) error {
 	_, err := r.db.InsertOne(
 		r.ctx,
 		bson.M{

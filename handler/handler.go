@@ -1,3 +1,4 @@
+// Package handler contains function for collecting data from requests
 package handler
 
 import (
@@ -12,23 +13,26 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+// TopGames stores DB connection's, context's and next structure's objects for handler package
 type TopGames struct {
-	db   *mongo.Collection
-	ctx  context.Context
-	serv *service.TopGames
+	db  *mongo.Collection
+	ctx context.Context
+	srv *service.TopGames
 }
 
-func NewHndl(ctx context.Context, db *mongo.Collection) *TopGames {
-	return &TopGames{db, ctx, service.NewSrv(ctx, db)}
+// NewHandler is a constructor for creating "TopGames"'s object in handler package
+func NewHandler(ctx context.Context, db *mongo.Collection) *TopGames {
+	return &TopGames{db, ctx, service.NewService(ctx, db)}
 }
 
+// Read gets id from request and passes in to srv.Read
 func (con *TopGames) Read(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return errors.Wrap(err, "Wrong input")
 	}
 
-	g, err := con.serv.Read(id)
+	g, err := con.srv.Read(id)
 	if err != nil {
 		return errors.Wrap(err, "Read failed")
 	}
@@ -36,6 +40,7 @@ func (con *TopGames) Read(c echo.Context) error {
 	return c.JSON(http.StatusOK, g)
 }
 
+// Create decodes JSON request into "TopGames"'s object and passes it to srv.Create
 func (con *TopGames) Create(c echo.Context) error {
 	var err error
 
@@ -45,7 +50,7 @@ func (con *TopGames) Create(c echo.Context) error {
 		return errors.Wrap(err, "Wrong input")
 	}
 
-	err = con.serv.Create(g)
+	err = con.srv.Create(g)
 
 	if err != nil {
 		return errors.Wrap(err, "Create failed")
@@ -54,6 +59,7 @@ func (con *TopGames) Create(c echo.Context) error {
 	return c.String(http.StatusCreated, "Line have been created")
 }
 
+// Update decodes JSON request into "TopGames"'s object and passes it to srv.Update
 func (con *TopGames) Update(c echo.Context) error {
 	var err error
 
@@ -62,7 +68,7 @@ func (con *TopGames) Update(c echo.Context) error {
 		return errors.Wrap(err, "Wrong input")
 	}
 
-	err = con.serv.Update(g)
+	err = con.srv.Update(g)
 
 	if err != nil {
 		return errors.Wrap(err, "Update failed")
@@ -71,13 +77,14 @@ func (con *TopGames) Update(c echo.Context) error {
 	return c.String(http.StatusCreated, "Line have been updated")
 }
 
+// Delete gets id from request and passes in to srv.Delete
 func (con *TopGames) Delete(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return errors.Wrap(err, "Wrong input")
 	}
 
-	err = con.serv.Delete(id)
+	err = con.srv.Delete(id)
 
 	if err != nil {
 		return errors.Wrap(err, "Delete failed")

@@ -23,7 +23,7 @@ func main() {
 	_ = client.Connect(ctx)
 	collection := client.Database("TOP_GAMES").Collection("TopGames")
 	ctx = context.TODO()
-	con := handler.NewHndl(ctx, collection)
+	con := handler.NewHandler(ctx, collection)
 
 	e := echo.New()
 
