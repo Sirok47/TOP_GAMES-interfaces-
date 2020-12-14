@@ -17,15 +17,12 @@ import (
 
 // TopGames stores DB connection's, context's and next structure's objects for handler package
 type TopGames struct {
-	dbMongo *mongo.Collection
-	dbRedis redis.Conn
-	ctx     context.Context
-	srv     *service.TopGames
+	srv *service.TopGames
 }
 
 // NewHandler is a constructor for creating "TopGames"'s object in handler package
 func NewHandler(ctx context.Context, dbMongo *mongo.Collection, dbRedis redis.Conn) *TopGames {
-	return &TopGames{dbMongo, dbRedis, ctx, service.NewService(ctx, dbMongo, dbRedis)}
+	return &TopGames{service.NewService(ctx, dbMongo, dbRedis)}
 }
 
 // Read gets id from request and passes in to srv.Read
