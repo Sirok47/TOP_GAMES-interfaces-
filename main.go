@@ -4,6 +4,9 @@ import (
 	"context"
 	"time"
 
+	"github.com/Sirok47/TOP_GAMES/repository"
+	"github.com/Sirok47/TOP_GAMES/service"
+
 	"github.com/Sirok47/TOP_GAMES/handler"
 	"github.com/gomodule/redigo/redis"
 	"github.com/labstack/echo/v4"
@@ -14,7 +17,7 @@ import (
 )
 
 const (
-	dbChoice = 0 // 0 for Mongo, 1 for Redis
+	dbChoice = 1 // 0 for Mongo, 1 for Redis
 	timeout  = 10
 )
 
@@ -51,7 +54,7 @@ func main() {
 		return
 	}
 
-	con := handler.NewHandler(ctx, collection, conn)
+	con := handler.NewHandler(service.NewService(repository.NewRepository(ctx, collection, conn)))
 
 	e := echo.New()
 
