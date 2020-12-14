@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/Sirok47/TOP_GAMES/model"
-	"github.com/Sirok47/TOP_GAMES/service"
+	"github.com/Sirok47/TOP_GAMES/srv+rps/service"
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"
 )

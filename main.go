@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/Sirok47/TOP_GAMES/repository"
-	"github.com/Sirok47/TOP_GAMES/service"
+	"github.com/Sirok47/TOP_GAMES/srv+rps/repository"
+	"github.com/Sirok47/TOP_GAMES/srv+rps/service"
 
 	"github.com/Sirok47/TOP_GAMES/handler"
 	"github.com/gomodule/redigo/redis"
