@@ -27,6 +27,7 @@ func main() {
 		collection *mongo.Collection = nil
 		conn       redis.Conn        = nil
 		err        error
+		con        *handler.TopGames
 	)
 	switch dbChoice {
 	case 0:
@@ -39,6 +40,7 @@ func main() {
 		_ = client.Connect(ctx)
 		collection = client.Database("TOP_GAMES").Collection("TopGames")
 		ctx = context.TODO()
+		con = handler.NewHandler(service.NewService(repository.NewMongoRepository(ctx, collection)))
 	case 1:
 		conn, err = redis.Dial("tcp", "localhost:6379")
 		if err != nil {
@@ -50,11 +52,10 @@ func main() {
 				return
 			}
 		}()
+		con = handler.NewHandler(service.NewService(repository.NewRedisRepository(conn)))
 	default:
 		return
 	}
-
-	con := handler.NewHandler(service.NewService(repository.NewRepository(ctx, collection, conn)))
 
 	e := echo.New()
 

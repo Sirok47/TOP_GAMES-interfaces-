@@ -29,9 +29,10 @@ type TopGamesRedis struct {
 }
 
 // NewRepository is a constructor for creating "TopGames"'s object in repository package
-func NewRepository(ctx context.Context, dbMongo *mongo.Collection, dbRedis redis.Conn) DBTemplate {
-	if ctx != nil {
-		return &TopGamesMongo{dbMongo, ctx}
-	}
+func NewMongoRepository(ctx context.Context, dbMongo *mongo.Collection) DBTemplate {
+	return &TopGamesMongo{dbMongo, ctx}
+}
+
+func NewRedisRepository(dbRedis redis.Conn) DBTemplate {
 	return &TopGamesRedis{dbRedis}
 }
