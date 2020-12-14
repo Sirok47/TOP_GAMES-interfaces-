@@ -6,8 +6,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// Create inserts data from "TopGames" structure's object into DB
-func (r *TopGames) Create(g *model.SingleGame) error {
+// Create inserts data from "TopGames" structure's object into mongoDB
+func (r *TopGamesMongo) Create(g *model.SingleGame) error {
 	_, err := r.db.InsertOne(
 		r.ctx,
 		bson.M{
@@ -19,4 +19,13 @@ func (r *TopGames) Create(g *model.SingleGame) error {
 		})
 
 	return errors.Wrap(err, "Create failed")
+}
+
+// Create inserts data from "TopGames" structure's object into redisDB
+func (r *TopGamesRedis) Create(g *model.SingleGame) error {
+	_, err := r.db.Do("HMSET", g.ID, "Name", g.Name, "Rating", g.Rating, "Platform", g.Platform, "Date", g.Date)
+	if err != nil {
+		return errors.Wrap(err, "Create failed")
+	}
+	return nil
 }

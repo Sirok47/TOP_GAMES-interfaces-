@@ -5,24 +5,33 @@ import (
 	"context"
 
 	"github.com/Sirok47/TOP_GAMES/model"
-
+	"github.com/gomodule/redigo/redis"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type CRUDforDB interface {
-	Read(id int) (*model.SingleGame, error)
+// DBTemplate for mongo and redis
+type DBTemplate interface {
 	Create(g *model.SingleGame) error
-	Delete(id int) error
+	Read(id int) (*model.SingleGame, error)
 	Update(g *model.SingleGame) error
+	Delete(id int) error
 }
 
-// TopGames stores DB connection's, context's and next structure's objects for handler package
-type TopGames struct {
+// TopGamesMongo stores DB connection's and context's objects for mongoDB
+type TopGamesMongo struct {
 	db  *mongo.Collection
 	ctx context.Context
 }
 
+// TopGamesRedis stores DB connection's object for redis
+type TopGamesRedis struct {
+	db redis.Conn
+}
+
 // NewRepository is a constructor for creating "TopGames"'s object in repository package
-func NewRepository(ctx context.Context, db *mongo.Collection) CRUDforDB {
-	return &TopGames{db, ctx}
+func NewRepository(ctx context.Context, dbMongo *mongo.Collection, dbRedis redis.Conn) DBTemplate {
+	if ctx != nil {
+		return &TopGamesMongo{dbMongo, ctx}
+	}
+	return &TopGamesRedis{dbRedis}
 }

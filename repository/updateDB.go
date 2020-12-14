@@ -7,8 +7,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// Update updates data in DB using "TopGames" structure's object
-func (r *TopGames) Update(g *model.SingleGame) error {
+// Update updates data in mongoDB using "TopGames" structure's object
+func (r *TopGamesMongo) Update(g *model.SingleGame) error {
 	_, err := r.db.ReplaceOne(
 		r.ctx,
 		bson.D{
@@ -26,4 +26,9 @@ func (r *TopGames) Update(g *model.SingleGame) error {
 		})
 
 	return errors.Wrap(err, "Update failed")
+}
+
+// Update updates data in redisDB using "TopGames" structure's object
+func (r *TopGamesRedis) Update(g *model.SingleGame) error {
+	return r.Create(g)
 }

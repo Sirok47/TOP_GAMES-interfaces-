@@ -6,20 +6,21 @@ import (
 
 	"github.com/Sirok47/TOP_GAMES/model"
 	"github.com/Sirok47/TOP_GAMES/repository"
-	//"github.com/Sirok47/TOP_GAMES/repository/mongoDB"
+	"github.com/gomodule/redigo/redis"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // TopGames stores DB connection's, context's and next structure's objects for service package
 type TopGames struct {
-	db  *mongo.Collection
-	ctx context.Context
-	rps repository.CRUDforDB
+	dbMongo *mongo.Collection
+	dbRedis redis.Conn
+	ctx     context.Context
+	rps     repository.DBTemplate
 }
 
 // NewService is a constructor for creating "TopGames"'s object in service package
-func NewService(ctx context.Context, db *mongo.Collection) *TopGames {
-	return &TopGames{db, ctx, repository.NewRepository(ctx, db)}
+func NewService(ctx context.Context, dbMongo *mongo.Collection, dbRedis redis.Conn) *TopGames {
+	return &TopGames{dbMongo, dbRedis, ctx, repository.NewRepository(ctx, dbMongo, dbRedis)}
 }
 
 // Read passes id to rps.Read

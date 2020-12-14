@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gomodule/redigo/redis"
+
 	"github.com/Sirok47/TOP_GAMES/model"
 	"github.com/Sirok47/TOP_GAMES/service"
 	"github.com/labstack/echo/v4"
@@ -15,14 +17,15 @@ import (
 
 // TopGames stores DB connection's, context's and next structure's objects for handler package
 type TopGames struct {
-	db  *mongo.Collection
-	ctx context.Context
-	srv *service.TopGames
+	dbMongo *mongo.Collection
+	dbRedis redis.Conn
+	ctx     context.Context
+	srv     *service.TopGames
 }
 
 // NewHandler is a constructor for creating "TopGames"'s object in handler package
-func NewHandler(ctx context.Context, db *mongo.Collection) *TopGames {
-	return &TopGames{db, ctx, service.NewService(ctx, db)}
+func NewHandler(ctx context.Context, dbMongo *mongo.Collection, dbRedis redis.Conn) *TopGames {
+	return &TopGames{dbMongo, dbRedis, ctx, service.NewService(ctx, dbMongo, dbRedis)}
 }
 
 // Read gets id from request and passes in to srv.Read
