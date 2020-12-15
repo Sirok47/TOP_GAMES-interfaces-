@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/Sirok47/TOP_GAMES/srv+rps/repository"
-	"github.com/Sirok47/TOP_GAMES/srv+rps/service"
+	"github.com/Sirok47/TOP_GAMES_srv-rps/srv+rps/repository"
+	"github.com/Sirok47/TOP_GAMES_srv-rps/srv+rps/service"
 
-	"github.com/Sirok47/TOP_GAMES/handler"
+	"github.com/Sirok47/TOP_GAMES-interfaces-/handler"
 	"github.com/gomodule/redigo/redis"
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"

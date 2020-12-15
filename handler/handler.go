@@ -5,8 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Sirok47/TOP_GAMES/model"
-	"github.com/Sirok47/TOP_GAMES/srv+rps/service"
+	"github.com/Sirok47/TOP_GAMES_srv-rps/srv+rps/service"
+
+	"github.com/Sirok47/TOP_GAMES-interfaces-/model"
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"
 )
