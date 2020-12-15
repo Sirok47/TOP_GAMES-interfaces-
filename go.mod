@@ -1,4 +1,4 @@
-module github.com/Sirok47/TOP_GAMES-interfaces-
+module github.com/Sirok47/TOP_GAMES
 
 go 1.15
 
@@ -15,4 +15,5 @@ require (
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
+	mvdan.cc/gofumpt v0.0.0-20201129102820-5c11c50e9475 // indirect
 )
