@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"time"
 
 	"github.com/Sirok47/TOP_GAMES_srv-rps/srv+rps/repository"
@@ -17,7 +18,7 @@ import (
 )
 
 const (
-	dbChoice = 1 // 0 for Mongo, 1 for Redis
+	dbChoice = 1 // 0 for Postgres, 1 for Mongo, 2 for Redis
 	timeout  = 10
 )
 
@@ -31,6 +32,11 @@ func main() {
 	)
 	switch dbChoice {
 	case 0:
+		db, _ := sql.Open("postgres", "user=postgres password=glazirovanniisirok dbname=TOP_GAMES sslmode=disable")
+		defer db.Close()
+		con = handler.NewHandler(service.NewService(repository.NewPostgresRepository(db)))
+
+	case 1:
 		var cancel context.CancelFunc
 		client, _ := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
 		ctx, cancel = context.WithTimeout(context.Background(), timeout*time.Second)
@@ -41,7 +47,7 @@ func main() {
 		collection = client.Database("TOP_GAMES").Collection("TopGames")
 		ctx = context.TODO()
 		con = handler.NewHandler(service.NewService(repository.NewMongoRepository(ctx, collection)))
-	case 1:
+	case 2:
 		conn, err = redis.Dial("tcp", "localhost:6379")
 		if err != nil {
 			return
