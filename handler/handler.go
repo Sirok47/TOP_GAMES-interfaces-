@@ -5,9 +5,11 @@ import (
 	"net/http"
 	"strconv"
 
+	model2 "github.com/Sirok47/TOP_GAMES-interfaces-/model"
+
 	"github.com/Sirok47/TOP_GAMES_srv-rps/srv+rps/service"
 
-	"github.com/Sirok47/TOP_GAMES/model"
+	"github.com/Sirok47/TOP_GAMES-interfaces-/model"
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"
 )
@@ -47,7 +49,7 @@ func (con *TopGames) Create(c echo.Context) error {
 		return errors.Wrap(err, "Wrong input")
 	}
 
-	err = con.srv.Create(g)
+	err = con.srv.Create((*model2.SingleGame)(g))
 
 	if err != nil {
 		return errors.Wrap(err, "Create failed")
@@ -65,7 +67,7 @@ func (con *TopGames) Update(c echo.Context) error {
 		return errors.Wrap(err, "Wrong input")
 	}
 
-	err = con.srv.Update(g)
+	err = con.srv.Update((*model2.SingleGame)(g))
 
 	if err != nil {
 		return errors.Wrap(err, "Update failed")

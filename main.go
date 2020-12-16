@@ -8,7 +8,7 @@ import (
 	"github.com/Sirok47/TOP_GAMES_srv-rps/srv+rps/repository"
 	"github.com/Sirok47/TOP_GAMES_srv-rps/srv+rps/service"
 
-	"github.com/Sirok47/TOP_GAMES/handler"
+	"github.com/Sirok47/TOP_GAMES-interfaces-/handler"
 	"github.com/gomodule/redigo/redis"
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	dbChoice = 1 // 0 for Postgres, 1 for Mongo, 2 for Redis
+	dbChoice = 0 // 0 for Postgres, 1 for Mongo, 2 for Redis
 	timeout  = 10
 )
 
