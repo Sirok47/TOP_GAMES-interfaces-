@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package grpcpb;
+option go_package = "github.com/protocolbuffers/protobuf/examples/go/tutorialpb";
+service CRUD{
+  rpc Create(structmsg) returns (errmsg){}
+  rpc Delete(id) returns (errmsg){}
+  rpc Update(structmsg) returns (errmsg){}
+  rpc Read(id) returns (structmsg){}
+}
+
+message structmsg{
+  int32 ID = 1;
+  string Name = 2;
+  int32 Rating = 3;
+  string Platform = 4;
+  string Date = 5;
+  string err = 6;
+}
+
+message errmsg{
+  string err = 1;
+}
+
+message id{
+  int32 ID = 1;
+}

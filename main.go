@@ -1,20 +1,21 @@
 package main
 
 import (
+	grpcpb "TOP_GAMES-interfaces-/grpc"
 	"context"
 	"database/sql"
 	"time"
 
+	"github.com/Sirok47/TOP_GAMES-interfaces-/handler"
 	"github.com/Sirok47/TOP_GAMES_srv-rps/srv+rps/repository"
 	"github.com/Sirok47/TOP_GAMES_srv-rps/srv+rps/service"
-
-	"github.com/Sirok47/TOP_GAMES-interfaces-/handler"
 	"github.com/gomodule/redigo/redis"
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	_ "go.mongodb.org/mongo-driver/mongo/readpref"
+	"google.golang.org/grpc"
 )
 
 const (
@@ -30,12 +31,13 @@ func main() {
 		err        error
 		con        *handler.TopGames
 	)
+	gcon, _ := grpc.Dial(":8080", grpc.WithInsecure())
+	Cli := grpcpb.NewCRUDClient(gcon)
 	switch dbChoice {
 	case 0:
 		db, _ := sql.Open("postgres", "user=postgres password=glazirovanniisirok dbname=TOP_GAMES sslmode=disable")
 		defer db.Close()
-		con = handler.NewHandler(service.NewService(repository.NewPostgresRepository(db)))
-
+		con = handler.NewHandler(service.NewService(repository.NewPostgresRepository(db)), cli)
 	case 1:
 		var cancel context.CancelFunc
 		client, _ := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))

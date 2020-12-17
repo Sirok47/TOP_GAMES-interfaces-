@@ -2,6 +2,7 @@
 package handler
 
 import (
+	"TOP_GAMES-interfaces-/grpc"
 	"net/http"
 	"strconv"
 
@@ -17,11 +18,12 @@ import (
 // TopGames stores DB connection's, context's and next structure's objects for handler package
 type TopGames struct {
 	srv *service.TopGames
+	cli grpc.CRUDClient
 }
 
 // NewHandler is a constructor for creating "TopGames"'s object in handler package
-func NewHandler(srv *service.TopGames) *TopGames {
-	return &TopGames{srv}
+func NewHandler(srv *service.TopGames, cli grpc.CRUDClient) *TopGames {
+	return &TopGames{srv, cli}
 }
 
 // Read gets id from request and passes in to srv.Read
