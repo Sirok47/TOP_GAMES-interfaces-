@@ -1,11 +1,11 @@
 package main
 
 import (
-	grpcpb "TOP_GAMES-interfaces-/grpc"
 	"context"
 	"database/sql"
 	"time"
 
+	grpcpb "github.com/Sirok47/TOP_GAMES-interfaces-/grpc"
 	"github.com/Sirok47/TOP_GAMES-interfaces-/handler"
 	"github.com/Sirok47/TOP_GAMES_srv-rps/srv+rps/repository"
 	"github.com/Sirok47/TOP_GAMES_srv-rps/srv+rps/service"
@@ -32,7 +32,7 @@ func main() {
 		con        *handler.TopGames
 	)
 	gcon, _ := grpc.Dial(":8080", grpc.WithInsecure())
-	Cli := grpcpb.NewCRUDClient(gcon)
+	cli := grpcpb.NewCRUDClient(gcon)
 	switch dbChoice {
 	case 0:
 		db, _ := sql.Open("postgres", "user=postgres password=glazirovanniisirok dbname=TOP_GAMES sslmode=disable")
@@ -48,7 +48,7 @@ func main() {
 		_ = client.Connect(ctx)
 		collection = client.Database("TOP_GAMES").Collection("TopGames")
 		ctx = context.TODO()
-		con = handler.NewHandler(service.NewService(repository.NewMongoRepository(ctx, collection)))
+		con = handler.NewHandler(service.NewService(repository.NewMongoRepository(ctx, collection)), cli)
 	case 2:
 		conn, err = redis.Dial("tcp", "localhost:6379")
 		if err != nil {
@@ -60,7 +60,7 @@ func main() {
 				return
 			}
 		}()
-		con = handler.NewHandler(service.NewService(repository.NewRedisRepository(conn)))
+		con = handler.NewHandler(service.NewService(repository.NewRedisRepository(conn)), cli)
 	default:
 		return
 	}

@@ -2,11 +2,11 @@
 package handler
 
 import (
-	"TOP_GAMES-interfaces-/grpc"
+	"context"
 	"net/http"
 	"strconv"
 
-	model2 "github.com/Sirok47/TOP_GAMES-interfaces-/model"
+	grpcpb "github.com/Sirok47/TOP_GAMES-interfaces-/grpc"
 
 	"github.com/Sirok47/TOP_GAMES_srv-rps/srv+rps/service"
 
@@ -18,11 +18,11 @@ import (
 // TopGames stores DB connection's, context's and next structure's objects for handler package
 type TopGames struct {
 	srv *service.TopGames
-	cli grpc.CRUDClient
+	cli grpcpb.CRUDClient
 }
 
 // NewHandler is a constructor for creating "TopGames"'s object in handler package
-func NewHandler(srv *service.TopGames, cli grpc.CRUDClient) *TopGames {
+func NewHandler(srv *service.TopGames, cli grpcpb.CRUDClient) *TopGames {
 	return &TopGames{srv, cli}
 }
 
@@ -33,7 +33,7 @@ func (con *TopGames) Read(c echo.Context) error {
 		return errors.Wrap(err, "Wrong input")
 	}
 
-	g, err := con.srv.Read(id)
+	g, err := con.cli.Read(context.Background(), &grpcpb.Id{ID: int32(id)})
 	if err != nil {
 		return errors.Wrap(err, "Read failed")
 	}
@@ -43,38 +43,31 @@ func (con *TopGames) Read(c echo.Context) error {
 
 // Create decodes JSON request into "TopGames"'s object and passes it to srv.Create
 func (con *TopGames) Create(c echo.Context) error {
-	var err error
-
 	g := new(model.SingleGame)
 
-	if err = c.Bind(g); err != nil {
+	if err := c.Bind(g); err != nil {
 		return errors.Wrap(err, "Wrong input")
 	}
 
-	err = con.srv.Create((*model2.SingleGame)(g))
-
-	if err != nil {
-		return errors.Wrap(err, "Create failed")
+	err, _ := con.cli.Create(context.Background(), &grpcpb.Structmsg{ID: int32(g.ID), Name: g.Name, Rating: int32(g.Rating), Platform: g.Platform, Date: g.Date})
+	if err.Err != "" {
+		return c.String(http.StatusInternalServerError, err.Err)
 	}
-
 	return c.String(http.StatusCreated, "Line have been created")
 }
 
 // Update decodes JSON request into "TopGames"'s object and passes it to srv.Update
 func (con *TopGames) Update(c echo.Context) error {
-	var err error
-
 	g := new(model.SingleGame)
-	if err = c.Bind(g); err != nil {
+	if err := c.Bind(g); err != nil {
 		return errors.Wrap(err, "Wrong input")
 	}
 
-	err = con.srv.Update((*model2.SingleGame)(g))
+	err, _ := con.cli.Update(context.Background(), &grpcpb.Structmsg{ID: int32(g.ID), Name: g.Name, Rating: int32(g.Rating), Platform: g.Platform, Date: g.Date})
 
-	if err != nil {
-		return errors.Wrap(err, "Update failed")
+	if err.Err != "" {
+		return c.String(http.StatusInternalServerError, err.Err)
 	}
-
 	return c.String(http.StatusCreated, "Line have been updated")
 }
 
@@ -85,11 +78,10 @@ func (con *TopGames) Delete(c echo.Context) error {
 		return errors.Wrap(err, "Wrong input")
 	}
 
-	err = con.srv.Delete(id)
+	err2, _ := con.cli.Delete(context.Background(), &grpcpb.Id{ID: int32(id)})
 
-	if err != nil {
-		return errors.Wrap(err, "Delete failed")
+	if err2.Err != "" {
+		return c.String(http.StatusInternalServerError, err2.Err)
 	}
-
 	return c.String(http.StatusOK, "Line have been deleted")
 }
