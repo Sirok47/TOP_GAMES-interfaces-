@@ -8,8 +8,6 @@ import (
 
 	grpcpb "github.com/Sirok47/TOP_GAMES-interfaces-/grpc"
 
-	"github.com/Sirok47/TOP_GAMES_srv-rps/srv+rps/service"
-
 	"github.com/Sirok47/TOP_GAMES-interfaces-/model"
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"
@@ -17,13 +15,12 @@ import (
 
 // TopGames stores DB connection's, context's and next structure's objects for handler package
 type TopGames struct {
-	srv *service.TopGames
 	cli grpcpb.CRUDClient
 }
 
 // NewHandler is a constructor for creating "TopGames"'s object in handler package
-func NewHandler(srv *service.TopGames, cli grpcpb.CRUDClient) *TopGames {
-	return &TopGames{srv, cli}
+func NewHandler(cli grpcpb.CRUDClient) *TopGames {
+	return &TopGames{cli}
 }
 
 // Read gets id from request and passes in to srv.Read
@@ -49,10 +46,8 @@ func (con *TopGames) Create(c echo.Context) error {
 		return errors.Wrap(err, "Wrong input")
 	}
 
-	err, _ := con.cli.Create(context.Background(), &grpcpb.Structmsg{ID: int32(g.ID), Name: g.Name, Rating: int32(g.Rating), Platform: g.Platform, Date: g.Date})
-	if err.Err != "" {
-		return c.String(http.StatusInternalServerError, err.Err)
-	}
+	con.cli.Create(context.Background(), &grpcpb.Structmsg{ID: int32(g.ID), Name: g.Name, Rating: int32(g.Rating), Platform: g.Platform, Date: g.Date})
+
 	return c.String(http.StatusCreated, "Line have been created")
 }
 
