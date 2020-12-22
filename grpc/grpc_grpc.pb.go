@@ -120,7 +120,6 @@ type CRUDServer interface {
 	DeleteUser(context.Context, *Userstruct) (*Errmsg, error)
 	UpdateUser(context.Context, *Userstruct) (*Errmsg, error)
 	Login(context.Context, *Userstruct) (*Jwtoken, error)
-	mustEmbedUnimplementedCRUDServer()
 }
 
 // UnimplementedCRUDServer must be embedded to have forward compatible implementations.
