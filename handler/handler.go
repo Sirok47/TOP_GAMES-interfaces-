@@ -59,11 +59,11 @@ func (con *TopGames) Update(c echo.Context) error {
 		return errors.Wrap(err, "Wrong input")
 	}
 
-	err, _ := con.cli.Update(context.Background(), &grpcpb.Structmsg{ID: int32(g.ID), Name: g.Name, Rating: int32(g.Rating), Platform: g.Platform, Date: g.Date})
+	con.cli.Update(context.Background(), &grpcpb.Structmsg{ID: int32(g.ID), Name: g.Name, Rating: int32(g.Rating), Platform: g.Platform, Date: g.Date})
 
-	if err.Err != "" {
+	/*if err.Err != "" {
 		return c.String(http.StatusInternalServerError, err.Err)
-	}
+	}*/
 	return c.String(http.StatusCreated, "Line have been updated")
 }
 
@@ -85,9 +85,9 @@ func (con *TopGames) Delete(c echo.Context) error {
 func (con *TopGames) Login(c echo.Context) error {
 	username := c.Param("name")
 	password := c.Param("pass")
-	token, _ := con.cli.Login(context.Background(), &grpcpb.Userstruct{Name: username, Password: password})
-	if token.Err != "" {
-		return c.String(http.StatusInternalServerError, token.Err)
+	token, err := con.cli.Login(context.Background(), &grpcpb.Userstruct{Name: username, Password: password})
+	if err != nil {
+		return err
 	}
 	return c.JSON(http.StatusOK, map[string]string{
 		"token": token.Token,
@@ -97,10 +97,10 @@ func (con *TopGames) Login(c echo.Context) error {
 func (con *TopGames) CreateUser(c echo.Context) error {
 	username := c.Param("name")
 	password := c.Param("pass")
-	err, _ := con.cli.CreateUser(context.Background(), &grpcpb.Userstruct{Name: username, Password: password})
-	if err.Err != "" {
+	con.cli.CreateUser(context.Background(), &grpcpb.Userstruct{Name: username, Password: password})
+	/*if err.Err != "" {
 		return c.String(http.StatusInternalServerError, err.Err)
-	}
+	}*/
 	return c.String(http.StatusCreated, "User have been created")
 }
 
@@ -111,7 +111,7 @@ func (con *TopGames) DeleteUser(c echo.Context) error {
 	if err.Err != "" {
 		return c.String(http.StatusInternalServerError, err.Err)
 	}
-	return c.String(http.StatusCreated, "User have been created")
+	return c.String(http.StatusCreated, "User have been deleted")
 }
 
 func (con *TopGames) UpdateUser(c echo.Context) error {
@@ -121,5 +121,5 @@ func (con *TopGames) UpdateUser(c echo.Context) error {
 	if err.Err != "" {
 		return c.String(http.StatusInternalServerError, err.Err)
 	}
-	return c.String(http.StatusCreated, "User have been created")
+	return c.String(http.StatusCreated, "User have been updated")
 }
