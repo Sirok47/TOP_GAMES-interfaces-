@@ -123,22 +123,3 @@ func (con *TopGames) UpdateUser(c echo.Context) error {
 	}
 	return c.String(http.StatusCreated, "User have been created")
 }
-
-/*func (con *TopGames) Login(c echo.Context) error {
-	username := c.Param("name")
-	password := c.Param("pass")
-	if con.users[username] == password {
-		token := jwt.New(jwt.SigningMethodHS256)
-		claims := token.Claims.(jwt.MapClaims)
-		claims["name"] = "Max"
-		claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
-		t, err := token.SignedString([]byte("sirok"))
-		if err != nil {
-			return err
-		}
-		return c.JSON(http.StatusOK, map[string]string{
-			"token": t,
-		})
-	}
-	return echo.ErrUnauthorized
-}*/
