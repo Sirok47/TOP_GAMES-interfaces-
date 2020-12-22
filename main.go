@@ -21,7 +21,13 @@ func main() {
 
 	e := echo.New()
 
-	e.POST("/login/:name/:pass", con.Login)
+	e.GET("/login/:name/:pass", con.Login)
+
+	e.POST("/login/:name/:pass", con.CreateUser)
+
+	e.PUT("/login/:name/:pass", con.UpdateUser)
+
+	e.DELETE("/login/:name/:pass", con.DeleteUser)
 
 	e.POST("/write", con.Create, LoggedIn)
 

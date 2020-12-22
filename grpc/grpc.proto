@@ -7,6 +7,10 @@ service CRUD{
   rpc Delete(id) returns (errmsg){}
   rpc Update(structmsg) returns (errmsg){}
   rpc Read(id) returns (structmsg){}
+  rpc CreateUser(userstruct) returns (errmsg){}
+  rpc DeleteUser(userstruct) returns (errmsg){}
+  rpc UpdateUser(userstruct) returns (errmsg){}
+  rpc Login(userstruct) returns (jwtoken){}
 }
 
 message structmsg{
@@ -16,6 +20,17 @@ message structmsg{
   string Platform = 4;
   string Date = 5;
   string err = 6;
+}
+
+message jwtoken{
+  string token = 1;
+  string err = 2;
+}
+
+message userstruct{
+  string Name = 1;
+  string Password = 2;
+  string err = 3;
 }
 
 message errmsg{

@@ -5,12 +5,8 @@ import (
 	"context"
 	"net/http"
 	"strconv"
-	"time"
-
-	"github.com/dgrijalva/jwt-go"
 
 	grpcpb "github.com/Sirok47/TOP_GAMES-interfaces-/grpc"
-
 	"github.com/Sirok47/TOP_GAMES-interfaces-/model"
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"
@@ -49,8 +45,10 @@ func (con *TopGames) Create(c echo.Context) error {
 		return errors.Wrap(err, "Wrong input")
 	}
 
-	con.cli.Create(context.Background(), &grpcpb.Structmsg{ID: int32(g.ID), Name: g.Name, Rating: int32(g.Rating), Platform: g.Platform, Date: g.Date})
-
+	err, _ := con.cli.Create(context.Background(), &grpcpb.Structmsg{ID: int32(g.ID), Name: g.Name, Rating: int32(g.Rating), Platform: g.Platform, Date: g.Date})
+	if err.Err != "" {
+		return c.String(http.StatusInternalServerError, err.Err)
+	}
 	return c.String(http.StatusCreated, "Line have been created")
 }
 
@@ -87,6 +85,48 @@ func (con *TopGames) Delete(c echo.Context) error {
 func (con *TopGames) Login(c echo.Context) error {
 	username := c.Param("name")
 	password := c.Param("pass")
+	token, _ := con.cli.Login(context.Background(), &grpcpb.Userstruct{Name: username, Password: password})
+	if token.Err != "" {
+		return c.String(http.StatusInternalServerError, token.Err)
+	}
+	return c.JSON(http.StatusOK, map[string]string{
+		"token": token.Token,
+	})
+}
+
+func (con *TopGames) CreateUser(c echo.Context) error {
+	username := c.Param("name")
+	password := c.Param("pass")
+	err, _ := con.cli.CreateUser(context.Background(), &grpcpb.Userstruct{Name: username, Password: password})
+	if err.Err != "" {
+		return c.String(http.StatusInternalServerError, err.Err)
+	}
+	return c.String(http.StatusCreated, "User have been created")
+}
+
+func (con *TopGames) DeleteUser(c echo.Context) error {
+	username := c.Param("name")
+	password := c.Param("pass")
+	err, _ := con.cli.DeleteUser(context.Background(), &grpcpb.Userstruct{Name: username, Password: password})
+	if err.Err != "" {
+		return c.String(http.StatusInternalServerError, err.Err)
+	}
+	return c.String(http.StatusCreated, "User have been created")
+}
+
+func (con *TopGames) UpdateUser(c echo.Context) error {
+	username := c.Param("name")
+	password := c.Param("pass")
+	err, _ := con.cli.UpdateUser(context.Background(), &grpcpb.Userstruct{Name: username, Password: password})
+	if err.Err != "" {
+		return c.String(http.StatusInternalServerError, err.Err)
+	}
+	return c.String(http.StatusCreated, "User have been created")
+}
+
+/*func (con *TopGames) Login(c echo.Context) error {
+	username := c.Param("name")
+	password := c.Param("pass")
 	if con.users[username] == password {
 		token := jwt.New(jwt.SigningMethodHS256)
 		claims := token.Claims.(jwt.MapClaims)
@@ -101,4 +141,4 @@ func (con *TopGames) Login(c echo.Context) error {
 		})
 	}
 	return echo.ErrUnauthorized
-}
+}*/
