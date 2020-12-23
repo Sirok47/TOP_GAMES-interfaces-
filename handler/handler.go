@@ -14,13 +14,12 @@ import (
 
 // TopGames stores DB connection's, context's and next structure's objects for handler package
 type TopGames struct {
-	cli   grpcpb.CRUDClient
-	users map[string]string
+	cli grpcpb.CRUDClient
 }
 
 // NewHandler is a constructor for creating "TopGames"'s object in handler package
-func NewHandler(cli grpcpb.CRUDClient, u map[string]string) *TopGames {
-	return &TopGames{cli, u}
+func NewHandler(cli grpcpb.CRUDClient) *TopGames {
+	return &TopGames{cli}
 }
 
 // Read gets id from request and passes in to srv.Read

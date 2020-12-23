@@ -11,23 +11,22 @@ import (
 )
 
 func main() {
-	users := map[string]string{"max": "5742368M"}
 	LoggedIn := middleware.JWTWithConfig(middleware.JWTConfig{
 		SigningKey: []byte("sirok"),
 	})
 	gcon, _ := grpc.Dial(":8080", grpc.WithInsecure())
 	cli := grpcpb.NewCRUDClient(gcon)
-	con := handler.NewHandler(cli, users)
+	con := handler.NewHandler(cli)
 
 	e := echo.New()
 
 	e.GET("/login/:name/:pass", con.Login)
 
-	e.POST("/login/:name/:pass", con.CreateUser)
+	e.POST("/signup/:name/:pass", con.CreateUser)
 
-	e.PUT("/login/:name/:pass", con.UpdateUser)
+	e.PUT("/edituser/:name/:pass", con.UpdateUser)
 
-	e.DELETE("/login/:name/:pass", con.DeleteUser)
+	e.DELETE("/deleteuser/:name/:pass", con.DeleteUser)
 
 	e.POST("/write", con.Create, LoggedIn)
 
